@@ -1,6 +1,8 @@
 package com.example.demo.restcontrollers;
 
+import com.example.demo.models.HashTag;
 import com.example.demo.models.Instrument;
+import com.example.demo.repos.HashTagRepo;
 import com.example.demo.repos.InstrumentRepo;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +18,9 @@ public class InstrumentController {
 
     @Resource
     private InstrumentRepo instrumentRepo;
+
+    @Resource
+    private HashTagRepo hashTagRepo;
 
     @GetMapping("/api/instruments")
     public Collection<Instrument> getInstruments() {
@@ -34,7 +39,7 @@ public class InstrumentController {
         Optional<Instrument> instrumentToAddOpt = instrumentRepo.findByInstrumentName(instrumentName);
 
         if (instrumentToAddOpt.isEmpty()) {
-            Instrument instrumentToAdd = new Instrument(instrumentName);
+            Instrument instrumentToAdd = new Instrument();
             instrumentRepo.save(instrumentToAdd);
         }
         return (Collection<Instrument>) instrumentRepo.findAll();
@@ -49,4 +54,25 @@ public class InstrumentController {
         return (Collection<Instrument>) instrumentRepo.findAll();
     }
 
+    @PostMapping("/api/instruments/{id}/add-hashtag")
+    public Optional<Instrument> addHashTagToInstrument(@RequestBody String body, @PathVariable Long id) throws JSONException {
+        JSONObject newHashTag = new JSONObject(body);
+        String hashTagName = newHashTag.getString("name");
+        Optional<HashTag> hashTagToAddOpt = hashTagRepo.findByName(hashTagName);
+
+        if (hashTagToAddOpt.isPresent()) {
+            Optional<Instrument> instrumentToAddHashTagToOpt = instrumentRepo.findById(id);
+            Instrument instrumentToAddHashTagTo = instrumentToAddHashTagToOpt.get();
+            instrumentToAddHashTagTo.addHashTag(hashTagToAddOpt.get());
+            instrumentRepo.save(instrumentToAddHashTagTo);
+        } else {
+            HashTag newHashTagToSave =new HashTag (hashTagName);
+            hashTagRepo.save(newHashTagToSave);
+            Optional<Instrument> instrumentToAddHashTagToOpt = instrumentRepo.findById(id);
+            Instrument instrumentToAddHashTagTo = instrumentToAddHashTagToOpt.get();
+            instrumentToAddHashTagTo.addHashTag(newHashTagToSave);
+            instrumentRepo.save(instrumentToAddHashTagTo);
+        }
+        return instrumentRepo.findById(id);
+    }
 }

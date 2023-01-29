@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
-import style from './style.module.scss'
-import guitar from '../../assets/acoustic-guitar.png';
-import piano from '../../assets/piano.png';
-import violin from '../../assets/violin.png';
-import drums from '../../assets/drums.png';
-import flute from '../../assets/flute.png';
 
 import Axios from 'axios';
+import drums from '../../assets/drums.png';
+import flute from '../../assets/flute.png';
+import guitar from '../../assets/acoustic-guitar.png';
+import piano from '../../assets/piano.png';
+import style from './style.module.scss'
+import violin from '../../assets/violin.png';
 
 const InstrumentsPage = () => {
 
@@ -35,21 +35,36 @@ const InstrumentsPage = () => {
     return (
         <div>
             <h2>Our Instruments Page</h2>
-        <div className={style.instrument_icons}> 
-            <span><img src={guitar} className={style.icon_img} alt="guitar"></img></span>
-            <span><img src={piano} className={style.icon_img2} alt="piano"></img></span>
-            <span><img src={violin} className={style.icon_img3} alt="violin"></img></span>
-            <span><img src={drums} className={style.icon_img4} alt="drums"></img></span>
-            <span><img src={flute} className={style.icon_img5} alt="flute"></img></span>
-        </div>
-            {/* {loading ? <h3>Loading...</h3> : instruments.map(instrument => (
+            <div className={style.instrument_icons}> 
+                <span>
+                    <a href="/instruments/1"><img src={guitar} className={style.icon_img} alt="guitar"></img></a>
+                </span>
+                <span>
+                    <a href="/instruments/5"><img src={piano} className={style.icon_img2} alt="piano"></img></a>
+                </span>
+                <span>
+                    <a href="/instruments/3"><img src={violin} className={style.icon_img3} alt="violin"></img></a>
+                </span>
+                <span>
+                    <a href="/instruments/4"><img src={drums} className={style.icon_img4} alt="drums"></img></a>
+                </span>
+                <span>
+                    <a href="/instruments/5"><img src={flute} className={style.icon_img5} alt="flute"></img></a>
+                </span>
+            </div>
+        
+            {loading ? <h3>Loading...</h3> : instruments.map(instrument => (
                 <a key={instrument.id} href={`instruments/${instrument.id}`}>
                     <p>{instrument.instrumentName}</p>
-                </a> */}
-            {/* ))} */}
+                </a>
+            ))}
+    
         </div>
         
     );
 }
 
 export default InstrumentsPage;
+
+
+

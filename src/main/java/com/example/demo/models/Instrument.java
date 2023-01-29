@@ -3,6 +3,10 @@ package com.example.demo.models;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -12,23 +16,10 @@ public class Instrument {
     @GeneratedValue
     private Long id;
     private String instrumentName;
-//    private String image;
     private String description;
     private String famousArtist;
-
-    public Instrument(){
-    }
-
-    public Instrument(String instrumentName, String description, String famousArtist) {   //String image
-        this.instrumentName = instrumentName;
-//        this.image = image;           //how do we handle urls?
-        this.description = description;
-        this.famousArtist = famousArtist;
-    }
-
-    public Instrument(String instrumentName) {
-        this.instrumentName = instrumentName;
-    }
+    @ManyToMany
+    private Collection<HashTag> hashTags;
 
     public Long getId() {
         return id;
@@ -38,10 +29,6 @@ public class Instrument {
         return instrumentName;
     }
 
-//    public String getImage() {
-//        return image;
-//    }
-
     public String getDescription() {
         return description;
     }
@@ -50,16 +37,38 @@ public class Instrument {
         return famousArtist;
     }
 
+    public Collection<HashTag> getHashTags(){
+        return hashTags;
+    }
+
+    public Instrument(){
+    }
+
+    public Instrument(String instrumentName, String description, String famousArtist, HashTag...hashTags) {
+        this.instrumentName = instrumentName;
+        this.description = description;
+        this.famousArtist = famousArtist;
+        this.hashTags = new ArrayList<>(Arrays.asList(hashTags));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Instrument that = (Instrument) o;
-        return Objects.equals(id, that.id) && Objects.equals(instrumentName, that.instrumentName) && Objects.equals(description, that.description) && Objects.equals(famousArtist, that.famousArtist);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, instrumentName, description, famousArtist);
+        return Objects.hash(id);
+    }
+
+    public void addHashTag(HashTag hashTagToAdd) {
+        hashTags.add(hashTagToAdd);
+    }
+
+    public void deleteHashTag(HashTag hashTagToRemove) {
+        hashTags.remove(hashTagToRemove);
     }
 }
