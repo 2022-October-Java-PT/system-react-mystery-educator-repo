@@ -5,7 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Objects;
 
-@Entity
 public class Instrument {
 
     @Id
